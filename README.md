@@ -10,4 +10,6 @@ The Images folder has two subfolders, which in turn have each two subfolders. We
 
 Due to the large size of the folder, the data is available at the following repository: https://mega.nz/folder/9H4DTC5K#J3kU-Dg42svTev3R9v-3ig
 
+Or: you can browse the Images_RDTs folder, each zip file can be downloaded separately. You are also encouraged to save those files to your own Mega cloud repository (free storage up to 50GB).
+
 In case something goes wrong, please contact support@xrapid-group.com
