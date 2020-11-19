@@ -42,16 +42,21 @@ class CovidNet:
 		model.add(Dense(2, activation="softmax"))
 		return model
 
-model = CovidNet.build()
-model.summary()
-
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True, help="path to input dataset")
 ap.add_argument("-m", "--model", required=True, help="path to output model")
+ap.add_argument("-l", "--load", required=False, default=None, help="path to load model for initial weights.")
 args = vars(ap.parse_args())
 
-EPOCHS = 300
-INIT_LR = 0.5 * 1e-3
+model = CovidNet.build()
+model.summary()
+
+if args["load"] is not None:
+	print("[INFO] loading weights from: {}".format(args["load"]))
+	model.load_weights(args["load"])
+
+EPOCHS = 150
+INIT_LR = 1e-4
 BS = 16
 print("[INFO] loading images...")
 data = []
@@ -109,12 +114,12 @@ print("[INFO] training network...")
 try:
 	H = model.fit(x=aug.flow(trainX, trainY, batch_size=BS),
 				  validation_data=std_flow.flow(testX, testY), steps_per_epoch=len(trainX) // BS,
-				  epochs=EPOCHS, verbose=1, callbacks=[tensorboard_cb, mcp_save_best, mcp_save_last])
+				  epochs=EPOCHS, verbose=1, callbacks=[tensorboard_cb])
 except KeyboardInterrupt:
-	save_path = 'covidNet.ckpt'
-	model.save(save_path)
-	print('Output saved to: "{}./*"'.format(save_path))
+	save_path = 'checkpoint.h5'
+	model.save(save_path, save_format="h5")
+	print('Output saved to: "{}"'.format(save_path))
 
 print("[INFO] saving model...")
 model.save(args["model"], save_format="h5")
-print('Output saved to: "{}./*"'.format(args["model"]))
+print('Output saved to: "{}"'.format(args["model"]))
