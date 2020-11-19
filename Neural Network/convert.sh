@@ -1,0 +1,1 @@
+python convert.py --model covidNet.h5
